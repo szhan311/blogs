@@ -1,0 +1,7 @@
+title: 我的博客
+description: 记录与分享
+theme: minima
+author: 你的名字
+# 对于项目页（仓库名不是 username.github.io 时），请取消下面两行注释并替换仓库名：
+# baseurl: "/你的仓库名"
+# url: "https://你的GitHub用户名.github.io"
