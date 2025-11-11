@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page.title | escape }} | {{ site.title | escape }}</title>
+    {% if site.description %}<meta name="description" content="{{ site.description | escape }}">{% endif %}
+    <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
+    {% include head.html %}
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a class="site-title" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+        <nav class="site-nav">
+        </nav>
+      </div>
+    </header>
+    <main class="container">
+      {{ content }}
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <p>© {{ site.time | date: '%Y' }} {{ site.author | default: site.title }}</p>
+      </div>
+    </footer>
+  </body>
+</html>

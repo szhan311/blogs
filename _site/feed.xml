@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="http://localhost:4000/blogs/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blogs/" rel="alternate" type="text/html" /><updated>2025-11-10T16:47:19-08:00</updated><id>http://localhost:4000/blogs/feed.xml</id><title type="html">blogs</title><entry><title type="html">Maximum Likelihood = Minimize KL Divergence</title><link href="http://localhost:4000/blogs/2025/11/09/ML-KL.html" rel="alternate" type="text/html" title="Maximum Likelihood = Minimize KL Divergence" /><published>2025-11-09T18:00:00-08:00</published><updated>2025-11-09T18:00:00-08:00</updated><id>http://localhost:4000/blogs/2025/11/09/ML-KL</id><content type="html" xml:base="http://localhost:4000/blogs/2025/11/09/ML-KL.html"><![CDATA[<p>When we estimate parameters by <strong>Maximum Likelihood Estimation (MLE)</strong>,<br />
+we’re actually minimizing the <strong>Kullback–Leibler divergence</strong> between the true data distribution and our model’s distribution.</p>
+
+<hr />
+
+<h2 id="setup">Setup</h2>
+
+<p>Let the true data distribution be $p_\text{data}(x)$ (unknown),<br />
+and our model distribution be $p_\theta(x)$ with parameters $\theta$.</p>
+
+<p>MLE seeks:
+\(\theta^* = \arg\max_\theta \; \mathbb{E}_{x \sim p_\text{data}} [ \log p_\theta(x) ].\)</p>
+
+<hr />
+
+<h2 id="link-to-kl-divergence">Link to KL Divergence</h2>
+
+<p>The <strong>KL divergence</strong> from $p_\text{data}$ to $p_\theta$ is:</p>
+
+\[D_{\mathrm{KL}}(p_\text{data} \Vert p_\theta)
+= \mathbb{E}_{x \sim p_\text{data}} \left[ \log \frac{p_\text{data}(x)}{p_\theta(x)} \right].\]
+
+<p>We can expand this as:</p>
+
+\[D_{\mathrm{KL}}(p_\text{data} \Vert p_\theta)
+= \mathbb{E}_{p_\text{data}}[\log p_\text{data}(x)]
+- \mathbb{E}_{p_\text{data}}[\log p_\theta(x)].\]
+
+<p>The first term doesn’t depend on $\theta$,<br />
+so minimizing $D_{\mathrm{KL}}$ is equivalent to <strong>maximizing</strong> the expected log-likelihood!</p>
+
+<hr />
+
+<h2 id="interpretation">Interpretation</h2>
+
+<ul>
+  <li><strong>MLE</strong>: Find the model that makes the observed data most probable.</li>
+  <li><strong>KL minimization</strong>: Find the model closest (in information distance) to the true distribution.</li>
+</ul>
+
+<p>They are the <strong>same optimization</strong>, viewed from two lenses:</p>
+<blockquote>
+  <p>MLE ≡ minimize $D_{\mathrm{KL}}(p_\text{data} \Vert p_\theta)$</p>
+</blockquote>
+
+<hr />]]></content><author><name></name></author><category term="statistics" /><category term="information-theory" /><category term="ML" /><summary type="html"><![CDATA[When we estimate parameters by Maximum Likelihood Estimation (MLE), we’re actually minimizing the Kullback–Leibler divergence between the true data distribution and our model’s distribution.]]></summary></entry></feed>

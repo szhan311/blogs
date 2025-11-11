@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Maximum Likelihood = Minimize KL Divergence | blogs</title>
+    
+    <link rel="stylesheet" href="/blogs/assets/css/site.css">
+    <script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true
+    },
+    options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a class="site-title" href="/blogs/">blogs</a>
+        <nav class="site-nav">
+        </nav>
+      </div>
+    </header>
+    <main class="container">
+      <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Maximum Likelihood = Minimize KL Divergence</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-11-09T18:00:00-08:00" itemprop="datePublished">Nov 9, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>When we estimate parameters by <strong>Maximum Likelihood Estimation (MLE)</strong>,<br />
+we’re actually minimizing the <strong>Kullback–Leibler divergence</strong> between the true data distribution and our model’s distribution.</p>
+
+<hr />
+
+<h2 id="setup">Setup</h2>
+
+<p>Let the true data distribution be $p_\text{data}(x)$ (unknown),<br />
+and our model distribution be $p_\theta(x)$ with parameters $\theta$.</p>
+
+<p>MLE seeks:
+\(\theta^* = \arg\max_\theta \; \mathbb{E}_{x \sim p_\text{data}} [ \log p_\theta(x) ].\)</p>
+
+<hr />
+
+<h2 id="link-to-kl-divergence">Link to KL Divergence</h2>
+
+<p>The <strong>KL divergence</strong> from $p_\text{data}$ to $p_\theta$ is:</p>
+
+\[D_{\mathrm{KL}}(p_\text{data} \Vert p_\theta)
+= \mathbb{E}_{x \sim p_\text{data}} \left[ \log \frac{p_\text{data}(x)}{p_\theta(x)} \right].\]
+
+<p>We can expand this as:</p>
+
+\[D_{\mathrm{KL}}(p_\text{data} \Vert p_\theta)
+= \mathbb{E}_{p_\text{data}}[\log p_\text{data}(x)]
+- \mathbb{E}_{p_\text{data}}[\log p_\theta(x)].\]
+
+<p>The first term doesn’t depend on $\theta$,<br />
+so minimizing $D_{\mathrm{KL}}$ is equivalent to <strong>maximizing</strong> the expected log-likelihood!</p>
+
+<hr />
+
+<h2 id="interpretation">Interpretation</h2>
+
+<ul>
+  <li><strong>MLE</strong>: Find the model that makes the observed data most probable.</li>
+  <li><strong>KL minimization</strong>: Find the model closest (in information distance) to the true distribution.</li>
+</ul>
+
+<p>They are the <strong>same optimization</strong>, viewed from two lenses:</p>
+<blockquote>
+  <p>MLE ≡ minimize $D_{\mathrm{KL}}(p_\text{data} \Vert p_\theta)$</p>
+</blockquote>
+
+<hr />
+
+  </div><a class="u-url" href="/blogs/2025/11/09/ML-KL.html" hidden></a>
+</article>
+
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <p>© 2025 blogs</p>
+      </div>
+    </footer>
+  </body>
+</html>
