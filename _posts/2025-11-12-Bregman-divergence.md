@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Learn Conditional Expectations via Bregman divergence"
-date: 2025-11-11
+date: 2025-11-12
 tags: [reading notes]
 ---
 
