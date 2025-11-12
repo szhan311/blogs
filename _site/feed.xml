@@ -1,4 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="http://localhost:4000/blogs/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blogs/" rel="alternate" type="text/html" /><updated>2025-11-11T16:08:44-08:00</updated><id>http://localhost:4000/blogs/feed.xml</id><title type="html">blogs</title><entry><title type="html">Conditional Expectation - the core of diffusion models</title><link href="http://localhost:4000/blogs/2025/11/11/Conditional-Expectation.html" rel="alternate" type="text/html" title="Conditional Expectation - the core of diffusion models" /><published>2025-11-11T00:00:00-08:00</published><updated>2025-11-11T00:00:00-08:00</updated><id>http://localhost:4000/blogs/2025/11/11/Conditional-Expectation</id><content type="html" xml:base="http://localhost:4000/blogs/2025/11/11/Conditional-Expectation.html"><![CDATA[<p>The conditional expectation is the core to connect almost all things in diffusion models, e.g., the sampling ODE, SDE, training objective, score function and so on. This note try to understand diffusion models by conditional expecation.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="http://localhost:4000/blogs/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blogs/" rel="alternate" type="text/html" /><updated>2025-11-11T17:58:24-08:00</updated><id>http://localhost:4000/blogs/feed.xml</id><title type="html">blogs</title><entry><title type="html">Learn Conditional Expectations via Bregman divergence</title><link href="http://localhost:4000/blogs/2025/11/11/Bregman-divergence.html" rel="alternate" type="text/html" title="Learn Conditional Expectations via Bregman divergence" /><published>2025-11-11T00:00:00-08:00</published><updated>2025-11-11T00:00:00-08:00</updated><id>http://localhost:4000/blogs/2025/11/11/Bregman-divergence</id><content type="html" xml:base="http://localhost:4000/blogs/2025/11/11/Bregman-divergence.html"><![CDATA[<h1 id="bregman-divergence">Bregman divergence</h1>
+
+<p>The <strong>Bregman divergence</strong> measures how far two points are from each other <strong>with respect to a convex function</strong> — it generalizes familiar notions like squared Euclidean distance and Kullback–Leibler (KL) divergence.</p>
+
+<h2 id="definition">Definition</h2>
+<p>Let $\phi: \mathbb{R}^n \rightarrow \mathbb{R}$ be a strictly convex, differentiable function. The Bregman divergence between two points $x$ and $y$ is defined as:</p>
+
+\[D_{\phi} (x, y) = \phi(x)-\phi(y) - \langle\nabla \phi(y), x-y \rangle\]
+
+<p>where $\phi(x)$ is value of the convex function at $x$, $\nabla \phi(y)$ is gradient at $y$, $\langle \cdot, \cdot \rangle$ denotes inner product. Intuitively, $D_{\phi}(x, y)$ measures how much $\phi(x)$ exceeds the tangent plane to $\phi$ at $y$.</p>
+<h2 id="examples">Examples</h2>
+<p><strong>Squared Euclidean Distance</strong>. If $\phi(x)=\frac{1}{2}\Vert x \Vert^2$, then
+\(D_{\phi}(x, y)=\frac12 \Vert x-y \Vert_2^2\)
+So the Euclidean distance squared is a Bregman divergence.
+<strong>Kullback–Leibler (KL) Divergence</strong>. If $\phi(p)=\sum_{i}p_i\log p_i$ (the negative entropy), then</p>
+
+<p>\(D_{\phi}(p, q)=\sum_{i}p_i \log \frac{p_i}{q_i}\)
+That’s the KL divergence between distributions $p$ and $q$.</p>
+
+<h1 id="learn-conditional-expectations-via-bregman-divergence">Learn Conditional Expectations via Bregman divergence</h1>
+
+<blockquote>
+  <p>Proposition 1 [1].  Let $X\in \mathcal{S}_X, Y \in \mathcal{S}_Y$ be RVs over state spaces $\mathcal{S}_X$, $\mathcal{S}_Y$ and $g: \mathbb{R}^p \times \mathcal{S}_X \rightarrow \mathbb{R}^n$, $(\theta, x) \mapsto g^\theta(x)$, where $\theta \in \mathbb{R}^p$ denotes learnable parameters. Let $D_X(u, v),\, x \in \mathcal{S}_X$ be a Bregman divergence over a convex set $\Omega \subset \mathbb{R}^n$ that contains the image of $f$. 
+Then,
+\(\nabla_\theta \mathbb{E}_{X,Y}\, D_X\!\big(Y, g^\theta(X)\big)
+= \nabla_\theta \mathbb{E}_X\, D_X\!\big(\mathbb{E}[Y \mid X], g^\theta(X)\big).\)
+In particular, for all $x$ with $p_X(x) &gt; 0$, the global minimum of $g^\theta(x)$ with respect to $\theta$ satisfies
+\(g^\theta(x) = \mathbb{E}[Y \mid X = x].\)</p>
+</blockquote>
+
+<h2 id="learn-conditional-expectation-in-diffusion-model">Learn conditional expectation in diffusion model</h2>
+
+<p>For continuous diffusion models, $\mathbb{E}[f(x_0) \mid x_t]:= \int f(x_0) p( x_0\mid x_t) dx_0$. The conditional expectation $\mathbb{E}[f(x_0) \mid x_t]$ is the minimizer of the following objective:</p>
+
+\[\mathbb{E}[f (x_0) \mid x_t] = \arg \min_{g(x_t, t)} \ \mathbb{E}_{x_0 \sim \pi_0} \mathbb{E}_{x_t \sim p(x_t \mid x_0)} \Vert g(x_t, t) -f(x_0)\Vert^2 \tag{1}\]
+
+<p>Eq. (1) connect the conditional expectation with a minimizer, which is the objective for training.</p>
+
+<p>For discrete diffusion models, we want to learn</p>
+
+\[p_{0 \mid t}^{i}(x_0^i \mid x_t)= \mathbb{E}[\delta (X_0^i=x_0^i) \mid X_t =x_t]\]
+
+<p>Here we use KL-divergence instead of Squared Euclidean Distance. The loss is:</p>
+
+\[\mathbb{E}_{x_0 \sim \pi_0, x_t \sim p(x_t \mid x_0)} D \left(\delta (X_0^i=x_0^i), p_{0 \mid t}^{\theta, i}(X_0^i=x_0^i \mid X_t= x_t) \right)\]
+
+<p>where $D(p, q)= \sum_{\alpha \in \mathcal{\tau}} p(\alpha) \log \frac{p(\alpha)}{q(\alpha)}$. Since minimize KL divergence is equivalent to maximize likelihood, we have</p>
+
+\[\arg \min - \mathbb{E}_{x_0 \sim \pi_0, x_t \sim p(x_t \mid x_0)} \log p_{0 \mid t}^{\theta, i} (X_0^i=x_0^i \mid X_t=x_t)\]
+
+<p>[1] Lipman Y, Havasi M, Holderrieth P, et al. Flow matching guide and code[J]. arXiv preprint arXiv:2412.06264, 2024.</p>]]></content><author><name></name></author><category term="reading notes" /><summary type="html"><![CDATA[Bregman divergence]]></summary></entry><entry><title type="html">Conditional Expectation - the core of diffusion models</title><link href="http://localhost:4000/blogs/2025/11/11/Conditional-Expectation.html" rel="alternate" type="text/html" title="Conditional Expectation - the core of diffusion models" /><published>2025-11-11T00:00:00-08:00</published><updated>2025-11-11T00:00:00-08:00</updated><id>http://localhost:4000/blogs/2025/11/11/Conditional-Expectation</id><content type="html" xml:base="http://localhost:4000/blogs/2025/11/11/Conditional-Expectation.html"><![CDATA[<p>The conditional expectation is the core to connect almost all things in diffusion models, e.g., the sampling ODE, SDE, training objective, score function and so on. This note try to understand diffusion models by conditional expecation.</p>
 
 <h1 id="preliminary">Preliminary</h1>
 
@@ -53,7 +103,7 @@ Therefore, the related ODE of $p_t$ is Eq. (4).</p>
 
 <p>The conditional expectation $\mathbb{E}[f(\cdot) \mid x_t]$ is the minimizer of the following objective:</p>
 
-\[\mathbb{E}[f (\cdot) \mid x_t] = \arg \min \int_{0}^1 \mathbb{E}_{x_0 \sim \pi_0} \mathbb{E}_{x_t \sim p(x_t \mid x_0)} \Vert D(x_t, t) -f(\cdot)\Vert^2 dt \tag{7}\]
+\[\mathbb{E}[f (\cdot) \mid x_t] = \arg \min  \mathbb{E}_{x_0 \sim \pi_0} \mathbb{E}_{x_t \sim p(x_t \mid x_0)} \Vert D(x_t, t) -f(\cdot)\Vert^2 \tag{7}\]
 
 <p>Eq. (7) connect the conditional expectation with a minimizer, which is the objective for training.</p>
 

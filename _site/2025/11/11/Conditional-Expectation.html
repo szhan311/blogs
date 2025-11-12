@@ -94,7 +94,7 @@ Therefore, the related ODE of $p_t$ is Eq. (4).</p>
 
 <p>The conditional expectation $\mathbb{E}[f(\cdot) \mid x_t]$ is the minimizer of the following objective:</p>
 
-\[\mathbb{E}[f (\cdot) \mid x_t] = \arg \min \int_{0}^1 \mathbb{E}_{x_0 \sim \pi_0} \mathbb{E}_{x_t \sim p(x_t \mid x_0)} \Vert D(x_t, t) -f(\cdot)\Vert^2 dt \tag{7}\]
+\[\mathbb{E}[f (\cdot) \mid x_t] = \arg \min  \mathbb{E}_{x_0 \sim \pi_0} \mathbb{E}_{x_t \sim p(x_t \mid x_0)} \Vert D(x_t, t) -f(\cdot)\Vert^2 \tag{7}\]
 
 <p>Eq. (7) connect the conditional expectation with a minimizer, which is the objective for training.</p>
 
