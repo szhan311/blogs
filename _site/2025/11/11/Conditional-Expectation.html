@@ -1,4 +1,45 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="http://localhost:4000/blogs/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blogs/" rel="alternate" type="text/html" /><updated>2025-11-11T16:08:44-08:00</updated><id>http://localhost:4000/blogs/feed.xml</id><title type="html">blogs</title><entry><title type="html">Conditional Expectation - the core of diffusion models</title><link href="http://localhost:4000/blogs/2025/11/11/Conditional-Expectation.html" rel="alternate" type="text/html" title="Conditional Expectation - the core of diffusion models" /><published>2025-11-11T00:00:00-08:00</published><updated>2025-11-11T00:00:00-08:00</updated><id>http://localhost:4000/blogs/2025/11/11/Conditional-Expectation</id><content type="html" xml:base="http://localhost:4000/blogs/2025/11/11/Conditional-Expectation.html"><![CDATA[<p>The conditional expectation is the core to connect almost all things in diffusion models, e.g., the sampling ODE, SDE, training objective, score function and so on. This note try to understand diffusion models by conditional expecation.</p>
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Conditional Expectation - the core of diffusion models | blogs</title>
+    
+    <link rel="stylesheet" href="/blogs/assets/css/site.css">
+    <script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true
+    },
+    options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a class="site-title" href="/blogs/">blogs</a>
+        <nav class="site-nav">
+        </nav>
+      </div>
+    </header>
+    <main class="container">
+      <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Conditional Expectation - the core of diffusion models</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-11-11T00:00:00-08:00" itemprop="datePublished">Nov 11, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>The conditional expectation is the core to connect almost all things in diffusion models, e.g., the sampling ODE, SDE, training objective, score function and so on. This note try to understand diffusion models by conditional expecation.</p>
 
 <h1 id="preliminary">Preliminary</h1>
 
@@ -90,49 +131,17 @@ For a Gaussian transition kernel $p(x_t \mid x_0) = \mathcal{N} (x_t; \alpha_t x
 
 <p>Lemma 1 tell us that there exists a series of SDEs that share the same marginal of an ODE. Therefore, we can extend ODE in Eq. (4) to SDEs:
 \(dX_t = (v_t(x_t)- \frac12 \zeta_t^2 \nabla_{x_t} \log p_t)dt + \zeta_t dW_t \tag{11}\)
-Note that $v_t(x_t)$ and $\nabla_{x_t} \log p_t(x_t)$ can be determined as one of them is known.</p>]]></content><author><name></name></author><category term="reading notes" /><summary type="html"><![CDATA[The conditional expectation is the core to connect almost all things in diffusion models, e.g., the sampling ODE, SDE, training objective, score function and so on. This note try to understand diffusion models by conditional expecation.]]></summary></entry><entry><title type="html">Maximum Likelihood = Minimize KL Divergence</title><link href="http://localhost:4000/blogs/2025/11/10/ML-KL.html" rel="alternate" type="text/html" title="Maximum Likelihood = Minimize KL Divergence" /><published>2025-11-10T00:00:00-08:00</published><updated>2025-11-10T00:00:00-08:00</updated><id>http://localhost:4000/blogs/2025/11/10/ML-KL</id><content type="html" xml:base="http://localhost:4000/blogs/2025/11/10/ML-KL.html"><![CDATA[<p>When we estimate parameters by <strong>Maximum Likelihood Estimation (MLE)</strong>,<br />
-we’re actually minimizing the <strong>Kullback–Leibler divergence</strong> between the true data distribution and our model’s distribution.</p>
+Note that $v_t(x_t)$ and $\nabla_{x_t} \log p_t(x_t)$ can be determined as one of them is known.</p>
 
-<hr />
 
-<h2 id="setup">Setup</h2>
+  </div><a class="u-url" href="/blogs/2025/11/11/Conditional-Expectation.html" hidden></a>
+</article>
 
-<p>Let the true data distribution be $p_\text{data}(x)$ (unknown),<br />
-and our model distribution be $p_\theta(x)$ with parameters $\theta$.</p>
-
-<p>MLE seeks:
-\(\theta^* = \arg\max_\theta \; \mathbb{E}_{x \sim p_\text{data}} [ \log p_\theta(x) ].\)</p>
-
-<hr />
-
-<h2 id="link-to-kl-divergence">Link to KL Divergence</h2>
-
-<p>The <strong>KL divergence</strong> from $p_\text{data}$ to $p_\theta$ is:</p>
-
-\[D_{\mathrm{KL}}(p_\text{data} \Vert p_\theta)
-= \mathbb{E}_{x \sim p_\text{data}} \left[ \log \frac{p_\text{data}(x)}{p_\theta(x)} \right].\]
-
-<p>We can expand this as:</p>
-
-\[D_{\mathrm{KL}}(p_\text{data} \Vert p_\theta)
-= \mathbb{E}_{p_\text{data}}[\log p_\text{data}(x)]
-- \mathbb{E}_{p_\text{data}}[\log p_\theta(x)].\]
-
-<p>The first term doesn’t depend on $\theta$,<br />
-so minimizing $D_{\mathrm{KL}}$ is equivalent to <strong>maximizing</strong> the expected log-likelihood!</p>
-
-<hr />
-
-<h2 id="interpretation">Interpretation</h2>
-
-<ul>
-  <li><strong>MLE</strong>: Find the model that makes the observed data most probable.</li>
-  <li><strong>KL minimization</strong>: Find the model closest (in information distance) to the true distribution.</li>
-</ul>
-
-<p>They are the <strong>same optimization</strong>, viewed from two lenses:</p>
-<blockquote>
-  <p>MLE ≡ minimize $D_{\mathrm{KL}}(p_\text{data} \Vert p_\theta)$</p>
-</blockquote>
-
-<hr />]]></content><author><name></name></author><category term="reading notes" /><summary type="html"><![CDATA[When we estimate parameters by Maximum Likelihood Estimation (MLE), we’re actually minimizing the Kullback–Leibler divergence between the true data distribution and our model’s distribution.]]></summary></entry></feed>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <p>© 2025 blogs</p>
+      </div>
+    </footer>
+  </body>
+</html>
